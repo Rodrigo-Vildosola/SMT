@@ -71,41 +71,54 @@ add_slide(prs, "Clase 2: Estadística",
 add_slide(prs, "Funciones de Densidad de Probabilidad", 
           [
               "Se analizaron las funciones de densidad de probabilidad (FDP) para describir cómo se distribuyen los valores de una variable aleatoria continua.",
-              "Características principales:",
-              "- No negativa: f(x) ≥ 0",
-              "- Área bajo la curva = 1",
-              "- Se utilizan para calcular probabilidades en intervalos específicos.",
-              "Ejemplo: Distribución normal, utilizada para modelar la velocidad de vehículos en una carretera."
+              "Algunas funciones importantes son:",
+              "- Distribución normal: ampliamente utilizada en transporte, modela la velocidad de vehículos.",
+              "- Distribución t de Student: útil para muestras pequeñas y desconocimiento de la desviación estándar.",
+              "Características principales de las FDP:",
+              "- No negativa: f(x) ≥ 0.",
+              "- Área bajo la curva = 1.",
+              "- Calculan probabilidades en intervalos específicos."
           ],
           title_font_size=36, content_font_size=24)
 
-# Diapositiva 4: Tests de Hipótesis - Introducción
-add_slide(prs, "Tests de Hipótesis: Introducción",
+# Diapositiva 4: Test de Hipótesis - Introducción
+add_slide(prs, "Test de Hipótesis: Concepto General",
           [
-              "Se definió un test de hipótesis como un procedimiento para decidir si aceptar o rechazar una suposición sobre una población basada en una muestra de datos.",
-              "Se planteó una pregunta estadística sobre los datos, como si la media de una muestra difiere de un valor específico.",
-              "Este proceso se basó en una distribución conocida bajo el supuesto de que la hipótesis nula es verdadera."
+              "Un test de hipótesis es un procedimiento estadístico que permite tomar decisiones sobre una población basada en una muestra.",
+              "El objetivo es decidir si aceptar o rechazar una suposición inicial (hipótesis nula) comparando los datos observados con los esperados.",
+              "Se define la hipótesis nula (H₀), que suele representar el estado de 'no efecto' o 'no diferencia', y la hipótesis alternativa (H₁), que representa el efecto o diferencia."
           ],
           title_font_size=36, content_font_size=24)
 
-# Diapositiva 5: Tests de Hipótesis - Pasos
-add_slide(prs, "Tests de Hipótesis: Pasos",
+# Diapositiva 5: P-Valor y Nivel de Significancia
+add_slide(prs, "P-Valor y Nivel de Significancia",
+          [
+              "El P-valor es la probabilidad de obtener un resultado al menos tan extremo como el observado, bajo la hipótesis nula.",
+              "Un valor bajo de p indica que los resultados observados son poco probables si H₀ fuera cierta, lo que lleva al rechazo de H₀.",
+              "- El nivel de significancia (α) es un umbral fijado previamente (ej. α = 0.05).",
+              "Si p ≤ α, se rechaza la hipótesis nula (H₀).",
+              "Ejemplo: En transporte, p puede indicar la probabilidad de que no haya diferencia entre las velocidades promedio de dos grupos de vehículos."
+          ],
+          title_font_size=36, content_font_size=24)
+
+# Diapositiva 6: Pasos en un Test de Hipótesis
+add_slide(prs, "Pasos en un Test de Hipótesis",
           [
               "Los pasos seguidos en un test de hipótesis fueron los siguientes:",
               "1. Plantear las hipótesis nula (H₀) y alternativa (H₁).",
               "2. Elegir un nivel de significancia (α).",
-              "3. Calcular el estadístico de prueba.",
-              "4. Determinar el p-valor.",
+              "3. Calcular el estadístico de prueba (puede usar la distribución t de Student, si es el caso).",
+              "4. Determinar el P-valor.",
               "5. Tomar una decisión: Rechazar H₀ si el p-valor es menor que α.",
-              "Ejemplo: Se comparó la media de las velocidades de vehículos en diferentes horas del día."
+              "Ejemplo: Comparación de velocidades promedio en diferentes horas del día usando la distribución t de Student."
           ],
           title_font_size=36, content_font_size=24)
 
-# Diapositiva 6: Tarea
+# Diapositiva 7: Tarea
 add_slide(prs, "Tarea: Aplicación de Estadística",
           [
               "Se asignó la siguiente tarea:",
-              "- Realizar un análisis utilizando una función de densidad para modelar los flujos de tráfico en una vía específica.",
+              "- Realizar un análisis utilizando una función de densidad, como la distribución t de Student, para modelar los flujos de tráfico en una vía específica.",
               "- Aplicar un test de hipótesis para verificar si la media del flujo vehicular a distintas horas del día es significativamente diferente.",
               "Entrega: Se solicitó presentar los resultados en un informe detallado."
           ],
