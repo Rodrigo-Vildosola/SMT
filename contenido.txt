@@ -39,8 +39,16 @@ Los pasos seguidos en un test de hipótesis fueron los siguientes:
 5. Tomar una decisión: Rechazar H₀ si el p-valor es menor que α.
 Ejemplo: Comparación de velocidades promedio en diferentes horas del día usando la distribución t de Student.
 
-## Tarea: Aplicación de Estadística
-Se asignó la siguiente tarea:
-- Realizar un análisis utilizando una función de densidad, como la distribución t de Student, para modelar los flujos de tráfico en una vía específica.
-- Aplicar un test de hipótesis para verificar si la media del flujo vehicular a distintas horas del día es significativamente diferente.
-Entrega: Se solicitó presentar los resultados en un informe detallado.
+## Ejemplo de Uso de un Test de Hipótesis: Distribución del Headway
+Un ejemplo del uso de un test de hipótesis es la distribución del headway (es decir, el tiempo en que pasa un auto después que otro en un punto fijo de una calle).
+Según Cowan (1975), esto seguía una distribución gamma, después se propusieron las distribuciones log-normales y log-logísticas.
+Según el profesor, la que más se ajusta a cómo distribuyen los headways es la loglogística y que esto es crítico en algunas aplicaciones científicas que serán explicadas en las clases posteriores.
+
+## Tarea: Ecuaciones Diferenciales
+La tarea para la clase posterior se enfoca en ecuaciones diferenciales. Se requiere:
+- Describir qué es una ecuación diferencial.
+- Diferenciar entre una ecuación diferencial lineal, ordinaria y de segundo orden.
+- Aprender sobre el problema del oscilador armónico amortiguado:
+  - Qué ecuación diferencial lo define.
+  - Condiciones iniciales.
+  - Solución particular.
