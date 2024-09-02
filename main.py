@@ -1,6 +1,7 @@
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
+import re
 
 # Crear una nueva presentación
 prs = Presentation()
@@ -24,13 +25,21 @@ def add_slide(prs, title, content, title_font_size=32, content_font_size=24):
     
     for paragraph_text in content:
         p = tf.add_paragraph()
-        p.text = paragraph_text
         p.font.size = Pt(content_font_size)
         
         if paragraph_text.startswith("-"):
-            p.level = 1  # Aplicar viñeta para elementos que empiezan con "-"
+            p.level = 1  
+            p.text = paragraph_text[1:].strip()  
+        
+        
+        elif re.match(r'^\d+\.', paragraph_text):
+            p.level = 1  
+            p.text = paragraph_text.strip()  
+        
         else:
-            p.level = 0  # Asegurarse de que el resto de los párrafos no tienen viñetas
+            p.level = 0  
+            p.text = paragraph_text
+
 
 # Diapositiva 1: Título
 slide_layout = prs.slide_layouts[0]  # Diapositiva de título
