@@ -61,13 +61,14 @@ Aparecen en muchos fenómenos físicos como el movimiento, crecimiento, y propag
 ## Tipos de Ecuaciones Diferenciales
 I. Ecuación Diferencial Ordinaria (EDO):
 - Involucra derivadas con respecto a una sola variable independiente.
-- Ejemplo: $$\frac{dy}{dx} + y = e^x$$
+- Ejemplo: dy/dx + y = e^x
 II. Ecuación Diferencial Lineal:
 - La función y sus derivadas aparecen de forma lineal.
-- Ejemplo: $$\frac{d^2y}{dx^2} + 3\frac{dy}{dx} + 2y = 0$$
+- Ejemplo: d^2y/dx^2 + 3dy/dx + 2y = 0
 III. Ecuación Diferencial de Segundo Orden:
 - Involucra hasta la segunda derivada de la función.
-- Ejemplo: $$\frac{d^2y}{dx^2} - 4\frac{dy}{dx} + 3y = 0$$
+- Ejemplo: d^2y/dx^2 - 4dy/dx + 3y = 0
+
 
 ## Oscilador Armónico Amortiguado
 El oscilador armónico amortiguado es un sistema físico en el que una fuerza de restauración (como un resorte) y una fuerza de amortiguación (como la fricción) actúan sobre un objeto.
@@ -76,16 +77,16 @@ La ecuación diferencial que lo define es de segundo orden y tiene la forma:
 $$ m\frac{d^2x}{dt^2} + c\frac{dx}{dt} + kx = 0 $$
 
 Donde:
-- $$m$$ es la masa del objeto.
-- $$c$$ es el coeficiente de amortiguación.
-- $$k$$ es la constante del resorte.
-- $$x(t)$$ es la posición del objeto en función del tiempo.
+- ( m ) es la masa del objeto.
+- ( c ) es el coeficiente de amortiguación.
+- ( k ) es la constante del resorte.
+- ( x(t) ) es la posición del objeto en función del tiempo.
 
 ### Condiciones Iniciales
-Las condiciones iniciales suelen incluir la posición inicial $$x(0)$$ y la velocidad inicial $$\frac{dx(0)}{dt}$$.
+Las condiciones iniciales suelen incluir la posición inicial ( x(0) ) y la velocidad inicial ( dx(0)/dt ).
 
 ### Solución Particular
 La solución de esta ecuación depende del régimen de amortiguación (subamortiguado, críticamente amortiguado, o sobreamortiguado):
-- **Subamortiguado**: $$c^2 < 4mk$$, el sistema oscila con una amplitud decreciente.
-- **Críticamente amortiguado**: $$c^2 = 4mk$$, el sistema retorna al equilibrio sin oscilar.
-- **Sobreamortiguado**: $$c^2 > 4mk$$, el sistema retorna lentamente al equilibrio sin oscilar.
+- Subamortiguado: ( c^2 < 4mk ), el sistema oscila con una amplitud decreciente.
+- Críticamente amortiguado: ( c^2 = 4mk ), el sistema retorna al equilibrio sin oscilar.
+- Sobreamortiguado: ( c^2 > 4mk ), el sistema retorna lentamente al equilibrio sin oscilar.

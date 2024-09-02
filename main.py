@@ -23,7 +23,30 @@ def latex_to_image(latex_code):
     
     return buf
 
-# Función para añadir una diapositiva con un estilo general
+# Function to parse and add formatted text to a paragraph
+def add_formatted_text(paragraph, text):
+    parts = re.split(r'(\*\*.+?\*\*|\$\$.+?\$\$)', text)  # Split by bold or LaTeX patterns
+
+    for part in parts:
+        if part.startswith('**') and part.endswith('**'):
+            # Bold text
+            run = paragraph.add_run()
+            run.text = part[2:-2]  # Remove the '**'
+            run.bold = True
+        elif part.startswith('$$') and part.endswith('$$'):
+            # LaTeX equation, render as image
+            latex_code = part[2:-2].strip()
+            image_stream = latex_to_image(latex_code)
+            
+            # Insert the image in the paragraph
+            slide = paragraph._element.getparent().getparent()  # Get slide from paragraph
+            img = slide.add_picture(image_stream, Inches(1), paragraph._element.top, width=Inches(5))
+        else:
+            # Regular text
+            run = paragraph.add_run()
+            run.text = part
+
+# Function to add a slide with general styling
 def add_slide(prs, title, content, title_font_size=32, content_font_size=24, background_color=None, title_color=RGBColor(0, 51, 102), content_color=RGBColor(0, 0, 0)):
     slide_layout = prs.slide_layouts[1]  # Diapositiva con título y contenido
     slide = prs.slides.add_slide(slide_layout)
@@ -45,37 +68,18 @@ def add_slide(prs, title, content, title_font_size=32, content_font_size=24, bac
     tf = content_placeholder.text_frame
     tf.clear()  # Limpiar cualquier contenido existente
 
-    top_position = Inches(1.5)  # Initial top position for content
-
-    
     for paragraph_text in content:
         p = tf.add_paragraph()
         p.font.size = Pt(content_font_size)
         p.font.color.rgb = content_color
-        
+
         if paragraph_text.startswith("### "):
             p.level = 0  # Subheader level (indentation)
             p.text = paragraph_text[4:].strip()  # Remove "### " from the text
             p.font.bold = True
             p.font.size = Pt(28)
-        elif paragraph_text.startswith("-"):
-            p.level = 1  # Bullet point
-            p.text = paragraph_text[1:].strip()
-        elif re.match(r'^\d+\.', paragraph_text):
-            p.level = 1  # Numbered list with indent
-            p.text = paragraph_text.strip()
-        elif paragraph_text.startswith("$$") and paragraph_text.endswith("$$"):
-            # Esto es para la ecuación en línea, estilo LaTeX
-            latex_code = paragraph_text[2:-2].strip()
-            image_stream = latex_to_image(latex_code)
-            
-            # Insertar la imagen en la diapositiva
-            image = slide.shapes.add_picture(image_stream, Inches(1), top_position, width=Inches(5))  # Adjust width and position as needed
-            
-            top_position += image.height + Inches(0.2)  # Update position for next content
         else:
-            p.level = 0  # Regular paragraph
-            p.text = paragraph_text
+            add_formatted_text(p, paragraph_text)  # Add formatted text
 
 # Leer el archivo de texto
 with open('contenido.txt', 'r', encoding='utf-8') as file:
