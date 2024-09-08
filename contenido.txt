@@ -95,3 +95,104 @@ La solución de esta ecuación depende del régimen de amortiguación (subamorti
 - Subamortiguado: ( c^2 < 4mk ), el sistema oscila con una amplitud decreciente.
 - Críticamente amortiguado: ( c^2 = 4mk ), el sistema retorna al equilibrio sin oscilar.
 - Sobreamortiguado: ( c^2 > 4mk ), el sistema retorna lentamente al equilibrio sin oscilar.
+
+## Clase 3: Ecuaciones Diferenciales en Ingeniería
+En esta clase, se exploraron ejemplos de lugares en la ingeniería donde las ecuaciones diferenciales son ampliamente utilizadas.
+
+## Ejemplos de Uso en Ingeniería
+Algunos ejemplos donde las ecuaciones diferenciales son esenciales incluyen:
+- Economía: Para modelar cómo evoluciona una economía a lo largo del tiempo, por ejemplo, en el crecimiento de la población o la evolución de precios.
+- Bioprocesos: En el estudio del crecimiento de poblaciones celulares, la difusión de nutrientes y productos en bioreactores.
+- Estructuras: Para analizar la deformación y el comportamiento dinámico de estructuras bajo cargas, como en puentes y edificios.
+
+## Aplicaciones en Simulaciones: Mecánica de Sólidos y Fluidos
+Las ecuaciones diferenciales son fundamentales en simulaciones con elementos finitos, tales como:
+- Mecánica de sólidos: Para modelar el comportamiento de materiales y estructuras bajo diferentes condiciones.
+- Mecánica de fluidos: Para simular el flujo de fluidos en diferentes entornos, desde el agua en tuberías hasta la circulación atmosférica.
+
+## Aplicaciones en Simulaciones: Pronóstico del Tiempo y Epidemiología
+Otras aplicaciones incluyen:
+- Pronóstico del tiempo: Utilizando modelos diferenciales para prever condiciones meteorológicas.
+- Propagación de enfermedades: Modelos epidemiológicos que predicen cómo se dispersan las enfermedades en una población.
+
+## Ecuaciones Diferenciales en el Modelamiento de Tráfico
+En el contexto del modelamiento de tráfico, las ecuaciones diferenciales permiten describir cómo evolucionan las densidades de tráfico, velocidades y flujos en una red vial.
+Esto es crucial para el diseño de sistemas de transporte eficientes y seguros.
+
+## Decisiones de Aceleración de un Conductor
+Las decisiones de aceleración de un conductor dependen de una función de su propia velocidad y del espaciamiento con el auto de adelante.
+- La mayoría de los modelos de tráfico siguen esta forma.
+- Si consideramos que la separación entre mi auto y el de adelante (S) es la diferencia entre la posición del auto de adelante (xk) y mi posición (xi), entonces se puede deducir que la aceleración de mi auto es una función de:
+  - Mi posición.
+  - Mi velocidad.
+  - La posición del auto de adelante.
+  - La velocidad del auto de adelante.
+
+## Modelos de Tráfico: Simplificaciones y Realidad
+Es importante destacar que:
+- Aunque en la vida real también se analiza el comportamiento de los autos que están más adelante que el que está inmediatamente enfrente, los modelos son representaciones matemáticas simplificadas de la realidad.
+- Estas simulaciones no siempre se traducen 1 a 1 con la realidad y, en ocasiones, presentan escenarios simplificados con el objetivo de ser más fáciles de entender o implementar.
+
+## Decisiones de Aceleración y Ecuaciones Diferenciales de Segundo Orden
+La decisión de aceleración de un conductor se puede modelar como una ecuación diferencial de segundo orden, ya que la aceleración es la segunda derivada de la posición.
+- Esta EDO puede ser lineal o no lineal, dependiendo del modelo utilizado.
+- También puede ser una EDO ordinaria (involucra derivadas con respecto a una sola variable independiente, como el tiempo).
+
+## Características de la Ecuación de Aceleración
+- Segunda Derivada: La aceleración es la segunda derivada de la posición con respecto al tiempo.
+- Linealidad: La ecuación puede ser lineal si la relación entre las variables es lineal; de lo contrario, es no lineal.
+- EDO Ordinaria: Es ordinaria si solo involucra derivadas respecto al tiempo, sin depender de otras variables adicionales.
+
+## Implicaciones del Modelo
+Dependiendo de cómo se modelen estas ecuaciones diferenciales, se pueden obtener diferentes comportamientos y predicciones para el tráfico.
+- Modelos lineales pueden simplificar los cálculos, pero pueden no capturar toda la complejidad del tráfico real.
+- Modelos no lineales pueden ser más realistas, pero también más complejos de resolver.
+
+## Introducción a los Métodos Numéricos
+Los métodos numéricos son técnicas utilizadas para encontrar soluciones aproximadas a problemas matemáticos que no pueden resolverse de manera exacta.
+- Estos métodos son esenciales en la ingeniería y la ciencia, donde a menudo se enfrentan ecuaciones diferenciales y otros problemas que no tienen soluciones analíticas.
+- Permiten obtener soluciones aproximadas a través de cálculos iterativos.
+
+## Método de Euler: Concepto General
+El método de Euler es uno de los métodos numéricos más sencillos para resolver ecuaciones diferenciales ordinarias (EDO).
+- Idea Principal: Aproximar la solución de una EDO utilizando la pendiente de la función en puntos discretos.
+- Fórmula Básica: A partir de un punto inicial ( (t_0, x_0) ), la solución se aproxima en pasos pequeños ( h ) según la fórmula:
+  
+  $$ x_{n+1} = x_n + h \cdot f(t_n, x_n) $$
+  
+  Donde ( f(t, x) ) es la función derivada y ( h ) es el tamaño del paso.
+
+## Ejemplo del Método de Euler
+Supongamos que tenemos la ecuación diferencial:
+
+$$  \frac{dx}{dt} = f(t, x) = t + x  $$
+
+Con la condición inicial ( x(0) = 1 ). Si aplicamos el método de Euler con un tamaño de paso ( h = 0.1 ), calculamos la solución aproximada en pasos discretos.
+
+## Introducción a las Series de Taylor
+Las series de Taylor son expansiones de funciones en forma de una suma infinita de términos calculados a partir de las derivadas de la función en un punto.
+- Son una herramienta fundamental para desarrollar métodos numéricos como Euler y Runge-Kutta.
+- Fórmula General: Una función ( f(x) ) puede ser expresada alrededor de un punto ( a ) como:
+
+$$ f(x) = f(a) + f'(a)(x-a) + \frac{f''(a)}{2!}(x-a)^2 + \cdots $$
+
+## Relación entre Método de Euler y Series de Taylor
+El método de Euler puede verse como una aproximación de primer orden basada en la serie de Taylor.
+- En la serie de Taylor, si se toma solo el primer término, se obtiene la fórmula básica del método de Euler.
+- Esto significa que el método de Euler utiliza solo la información de la derivada en el punto inicial para aproximar la solución.
+
+
+## Tarea: Resolución de Ecuaciones Diferenciales en Python
+La tarea para la próxima clase es la siguiente:
+
+### Instrucciones para la Tarea
+En base a la ecuación diferencial:
+
+$$ \frac{dx}{dt} = 1 - \frac{x^2}{50} - \frac{1}{x} + 2 \cdot \sin(t) $$
+
+Se solicita que:
+
+1. Escriba un programa en Python que resuelva esta ecuación diferencial.
+2. Implemente y grafique la solución utilizando los siguientes métodos numéricos:
+   - Método de Euler.
+   - Método de Runge-Kutta de segundo orden.
