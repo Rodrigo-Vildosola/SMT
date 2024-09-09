@@ -59,8 +59,9 @@ def plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes):
         mean_error = np.mean(errors)
         max_error = np.max(errors)
         
-        # Append error statistics
-        error_stats.append((h, mean_error, max_error))
+        # Append error statistics if valid
+        if pd.notna(mean_error) and pd.notna(max_error):
+            error_stats.append((h, mean_error, max_error))
     
     # Update plot layout
     fig.update_layout(title=f'Solution of ODE ({equation_str}) with {method} method',
@@ -68,42 +69,42 @@ def plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes):
                       height=600, width=1000)
 
     # Create a DataFrame to display the error statistics
-    error_df = pd.DataFrame({
-        "Step Size": [h for h, _, _ in error_stats],
-        "Mean Error (%)": [round(mean_err, 2) for _, mean_err, _ in error_stats],
-        "Max Error (%)": [round(max_err, 2) for _, _, max_err in error_stats]
-    })
+    if error_stats:  # Ensure there are valid rows before creating the DataFrame
+        error_df = pd.DataFrame({
+            "Step Size": [h for h, _, _ in error_stats],
+            "Mean Error (%)": [round(mean_err, 2) for _, mean_err, _ in error_stats],
+            "Max Error (%)": [round(max_err, 2) for _, _, max_err in error_stats]
+        })
+    else:
+        error_df = pd.DataFrame(columns=["Step Size", "Mean Error (%)", "Max Error (%)"])
 
     return fig, error_df
 
 def compare_methods(error_stats_dict):
     """Compare the mean errors and max errors across methods."""
-    comparison_df = pd.DataFrame(columns=['Method', 'Step Size', 'Mean Error (%)', 'Max Error (%)'])
+    comparison_rows = []
     
-    # Prepare rows for DataFrame
-    rows = []
     for method, stats in error_stats_dict.items():
         for (step_size, mean_error, max_error) in stats:
-            # Only include non-empty rows
             if pd.notna(mean_error) and pd.notna(max_error):
-                rows.append({
+                comparison_rows.append({
                     'Method': method,
                     'Step Size': step_size,
                     'Mean Error (%)': round(mean_error, 2),
                     'Max Error (%)': round(max_error, 2)
                 })
-    
-    # Concatenate only non-empty rows
-    if rows:
-        comparison_df = pd.concat([comparison_df, pd.DataFrame(rows)], ignore_index=True)
+
+    if comparison_rows:
+        # Create the comparison DataFrame only with valid rows
+        comparison_df = pd.DataFrame(comparison_rows)
+    else:
+        comparison_df = pd.DataFrame(columns=['Method', 'Step Size', 'Mean Error (%)', 'Max Error (%)'])
 
     st.markdown("## Cross-Method Comparison")
     st.markdown("The following table compares the error statistics across the selected methods:")
-    
-    # Only display the comparison if there are valid rows
+    st.table(comparison_df)
+
     if not comparison_df.empty:
-        st.table(comparison_df)
-        
         # Analyze the results
         st.markdown("### Insights from Comparison:")
         min_mean_error_row = comparison_df.loc[comparison_df['Mean Error (%)'].idxmin()]
@@ -111,10 +112,7 @@ def compare_methods(error_stats_dict):
 
         st.write(f"- The method with the lowest **mean error** is `{min_mean_error_row['Method']}` with a step size of {min_mean_error_row['Step Size']} and a mean error of {min_mean_error_row['Mean Error (%)']}%.")
         st.write(f"- The method with the lowest **max error** is `{min_max_error_row['Method']}` with a step size of {min_max_error_row['Step Size']} and a max error of {min_max_error_row['Max Error (%)']}%.")
-    else:
-        st.warning("No valid data to compare.")
-
-
+    
 def main():
     # Main app title and description
     st.title("Numerical ODE Solver with Dynamic Plot")
@@ -163,7 +161,7 @@ def main():
 
         st.markdown("## Error Statistics for Each Method")
         for method in methods:
-            st.markdown(f"#### Percent Error Statistics for {method} Method")
+            st.markdown(f"### Percent Error Statistics for {method} Method")
             st.table(pd.DataFrame(error_stats_dict[method], columns=["Step Size", "Mean Error (%)", "Max Error (%)"]))
 
         # Divider before cross-method comparison
