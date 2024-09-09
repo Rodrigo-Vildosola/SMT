@@ -4,4 +4,5 @@ __pycache__/
 euler.py
 newton.py
 rk4.py
+newell.py
 ppt/
