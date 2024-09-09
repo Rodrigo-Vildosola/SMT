@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from ode import dynamic_ode_function, real_solution, percent_error, euler_method, rk2_method, midpoint_method, rk4_method
+from ode import dynamic_ode_function, real_solution, percent_error, euler_method, rk2_method, rk4_method
 
 # Set the page layout to wide
 st.set_page_config(layout="wide")
@@ -15,7 +15,7 @@ def get_real_solution(t0, tf, x0, equation_str):
 
 # Cache the function to generate error statistics and plot
 @st.cache_data
-def plot_solution_and_errors(equation_str, x0, t0, tf, methods, step_sizes):
+def plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes):
     ode_func = dynamic_ode_function(equation_str)
 
     # Get real solution
@@ -36,46 +36,42 @@ def plot_solution_and_errors(equation_str, x0, t0, tf, methods, step_sizes):
 
     error_stats = []
 
-    # Iterate over each method and step size
-    for method in methods:
-        for h in step_sizes:
-            t_values = np.linspace(t0, tf, int((tf - t0) / h) + 1)
+    # Iterate over each step size
+    for h in step_sizes:
+        t_values = np.linspace(t0, tf, int((tf - t0) / h) + 1)
 
-            # Select the numerical method
-            if method == 'Euler':
-                x_values = euler_method(ode_func, t_values, x0, h)
-            elif method == 'Runge-Kutta 2nd Order':
-                x_values = rk2_method(ode_func, t_values, x0, h)
-            elif method == 'Midpoint':
-                x_values = midpoint_method(ode_func, t_values, x0, h)
-            elif method == 'Runge-Kutta 4th Order':
-                x_values = rk4_method(ode_func, t_values, x0, h)
-            else:
-                continue
+        # Select the numerical method
+        if method == 'Euler':
+            x_values = euler_method(ode_func, t_values, x0, h)
+        elif method == 'Runge-Kutta 2nd Order':
+            x_values = rk2_method(ode_func, t_values, x0, h)
+        elif method == 'Runge-Kutta 4th Order':
+            x_values = rk4_method(ode_func, t_values, x0, h)
+        else:
+            continue
 
-            # Add trace to the plot for this method and step size
-            fig.add_trace(go.Scatter(x=t_values, y=x_values, mode='lines+markers', name=f'{method} (h={h})'))
-            
-            # Compute the errors
-            x_real_at_steps = real_sol.sol(t_values)[0]
-            errors = percent_error(x_real_at_steps, x_values)
-            mean_error = np.mean(errors)
-            max_error = np.max(errors)
-            
-            # Append error statistics
-            error_stats.append((method, h, mean_error, max_error))
+        # Add trace to the plot for this method and step size
+        fig.add_trace(go.Scatter(x=t_values, y=x_values, mode='lines+markers', name=f'{method} (h={h})'))
+        
+        # Compute the errors
+        x_real_at_steps = real_sol.sol(t_values)[0]
+        errors = percent_error(x_real_at_steps, x_values)
+        mean_error = np.mean(errors)
+        max_error = np.max(errors)
+        
+        # Append error statistics
+        error_stats.append((h, mean_error, max_error))
     
     # Update plot layout
-    fig.update_layout(title=f'Solution of ODE ({equation_str}) with selected methods',
-                      xaxis_title='Time t', yaxis_title='Solution x(t)', legend_title='Methods and Step Sizes',
+    fig.update_layout(title=f'Solution of ODE ({equation_str}) with {method} method',
+                      xaxis_title='Time t', yaxis_title='Solution x(t)', legend_title=f'{method} (Step Sizes)',
                       height=600, width=1000)
 
     # Create a DataFrame to display the error statistics
     error_df = pd.DataFrame({
-        "Method": [m for m, _, _, _ in error_stats],
-        "Step Size": [h for _, h, _, _ in error_stats],
-        "Mean Error (%)": [round(mean_err, 2) for _, _, mean_err, _ in error_stats],
-        "Max Error (%)": [round(max_err, 2) for _, _, _, max_err in error_stats]
+        "Step Size": [h for h, _, _ in error_stats],
+        "Mean Error (%)": [round(mean_err, 2) for _, mean_err, _ in error_stats],
+        "Max Error (%)": [round(max_err, 2) for _, _, max_err in error_stats]
     })
 
     return fig, error_df
@@ -101,7 +97,7 @@ def main():
     
     # Allow the user to select multiple numerical methods
     methods = st.sidebar.multiselect("Numerical Methods:", 
-                                     ["Euler", "Runge-Kutta 2nd Order", "Midpoint", "Runge-Kutta 4th Order"], 
+                                     ["Euler", "Runge-Kutta 2nd Order", "Runge-Kutta 4th Order"], 
                                      ["Euler", "Runge-Kutta 2nd Order"])
     
     # Allow the user to select step sizes
@@ -109,14 +105,19 @@ def main():
 
     # Automatically update the plot and table as inputs change
     if methods and step_sizes:
-        fig, error_df = plot_solution_and_errors(equation_str, x0, t0, tf, methods, step_sizes)
+        # Iterate over each method selected by the user
+        for method in methods:
+            st.markdown(f"## {method} Method")
+            
+            # Generate the plot and error table for each method
+            fig, error_df = plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes)
 
-        # Show plot
-        st.plotly_chart(fig, use_container_width=True)
+            # Show plot
+            st.plotly_chart(fig, use_container_width=True)
 
-        # Show error statistics table
-        st.markdown("### Percent Error Statistics")
-        st.table(error_df)
+            # Show error statistics table
+            st.markdown(f"### Percent Error Statistics for {method} Method")
+            st.table(error_df)
     else:
         st.warning("Please select at least one method and one step size to see the results.")
 
