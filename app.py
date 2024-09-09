@@ -5,7 +5,11 @@ import plotly.graph_objects as go
 from ode import dynamic_ode_function, real_solution, percent_error, euler_method, rk2_method, rk4_method
 
 # Set the page layout to wide
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_title="Numerical ODE Solver", page_icon="🔢")
+
+# Sidebar Title and Icon
+st.sidebar.title("🔧 Numerical ODE Solver")
+st.sidebar.markdown("Solve and compare different numerical methods for ODEs")
 
 # Cache the real solution calculation to optimize performance
 @st.cache_data
@@ -100,13 +104,13 @@ def compare_methods(error_stats_dict):
     else:
         comparison_df = pd.DataFrame(columns=['Method', 'Step Size', 'Mean Error (%)', 'Max Error (%)'])
 
-    st.markdown("## Cross-Method Comparison")
+    st.markdown("## 🔍 Cross-Method Comparison")
     st.markdown("The following table compares the error statistics across the selected methods:")
     st.table(comparison_df)
 
     if not comparison_df.empty:
         # Analyze the results
-        st.markdown("### Insights from Comparison:")
+        st.markdown("### 📊 Insights from Comparison:")
         min_mean_error_row = comparison_df.loc[comparison_df['Mean Error (%)'].idxmin()]
         min_max_error_row = comparison_df.loc[comparison_df['Max Error (%)'].idxmin()]
 
@@ -115,37 +119,37 @@ def compare_methods(error_stats_dict):
     
 def main():
     # Main app title and description
-    st.title("Numerical ODE Solver with Dynamic Plot")
+    st.title("🔢 Numerical ODE Solver")
     st.subheader("This application allows you to solve ordinary differential equations using different numerical methods and compare their accuracy.")
     
     # Define widgets for input in a wide layout
-    equation_str = st.text_input("Enter the ODE function in terms of y and t:", "y**2 / 2")
+    equation_str = st.text_input("📋 Enter the ODE function in terms of y and t:", "y**2 / 2")
     
     # Sidebar Inputs
-    st.sidebar.markdown("### Set the initial condition and time range:")
-    x0 = st.sidebar.slider("Initial Condition (y(0)):", -10.0, 10.0, 1.0)
+    st.sidebar.markdown("### 🛠️ Set the initial condition and time range:")
+    x0 = st.sidebar.slider("📍 Initial Condition (y(0)):", -10.0, 10.0, 1.0, help="Set the initial value of y.")
     
     # Place t0 and tf sliders in the same row in the sidebar
-    st.sidebar.markdown("### Time Range:")
-    t0 = st.sidebar.slider("Initial Time (t0):", 0.0, 5.0, 0.0)
-    tf = st.sidebar.slider("Final Time (tf):", 0.1, 5.0, 1.0)
+    st.sidebar.markdown("### ⏳ Time Range:")
+    t0 = st.sidebar.slider("⏰ Initial Time (t0):", 0.0, 5.0, 0.0, help="Set the initial time.")
+    tf = st.sidebar.slider("⏲️ Final Time (tf):", 0.1, 5.0, 1.0, help="Set the final time for the simulation.")
 
-    st.sidebar.markdown("### Choose the numerical methods and step sizes:")
+    st.sidebar.markdown("### ⚙️ Choose the numerical methods and step sizes:")
     
     # Allow the user to select multiple numerical methods
-    methods = st.sidebar.multiselect("Numerical Methods:", 
+    methods = st.sidebar.multiselect("📐 Numerical Methods:", 
                                      ["Euler", "Runge-Kutta 2nd Order", "Runge-Kutta 4th Order"], 
                                      ["Euler", "Runge-Kutta 2nd Order"])
     
     # Allow the user to select step sizes
-    step_sizes = st.sidebar.multiselect("Step Sizes (h):", [0.1, 0.05, 0.01, 0.005], [0.1, 0.05, 0.01])
+    step_sizes = st.sidebar.multiselect("🧮 Step Sizes (h):", [0.1, 0.05, 0.01, 0.005], [0.1, 0.05, 0.01])
 
     # Dictionary to store error stats for comparison
     error_stats_dict = {}
 
     # Automatically update the plot and table as inputs change
     if methods and step_sizes:
-        st.markdown("## Method Solutions")
+        st.markdown("## 📈 Method Solutions")
         for method in methods:
             st.markdown(f"### {method} Method")
             fig, error_df = plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes)
@@ -159,7 +163,7 @@ def main():
         # Divider before showing error statistics
         st.divider()
 
-        st.markdown("## Error Statistics for Each Method")
+        st.markdown("## 📉 Error Statistics for Each Method")
         for method in methods:
             st.markdown(f"### Percent Error Statistics for {method} Method")
             st.table(pd.DataFrame(error_stats_dict[method], columns=["Step Size", "Mean Error (%)", "Max Error (%)"]))
@@ -171,7 +175,7 @@ def main():
         compare_methods(error_stats_dict)
         
     else:
-        st.warning("Please select at least one method and one step size to see the results.")
+        st.warning("⚠️ Please select at least one method and one step size to see the results.")
 
 if __name__ == "__main__":
     main()
