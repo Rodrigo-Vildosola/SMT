@@ -1,3 +1,7 @@
 .venv/
 __pycache__/
 *.pptx
+euler.py
+newton.py
+rk4.py
+ppt/
