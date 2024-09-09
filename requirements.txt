@@ -5,3 +5,4 @@ watchdog
 numpy
 pandas
 plotly
+sympy
