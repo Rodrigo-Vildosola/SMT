@@ -76,6 +76,45 @@ def plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes):
 
     return fig, error_df
 
+def compare_methods(error_stats_dict):
+    """Compare the mean errors and max errors across methods."""
+    comparison_df = pd.DataFrame(columns=['Method', 'Step Size', 'Mean Error (%)', 'Max Error (%)'])
+    
+    # Prepare rows for DataFrame
+    rows = []
+    for method, stats in error_stats_dict.items():
+        for (step_size, mean_error, max_error) in stats:
+            # Only include non-empty rows
+            if pd.notna(mean_error) and pd.notna(max_error):
+                rows.append({
+                    'Method': method,
+                    'Step Size': step_size,
+                    'Mean Error (%)': round(mean_error, 2),
+                    'Max Error (%)': round(max_error, 2)
+                })
+    
+    # Concatenate only non-empty rows
+    if rows:
+        comparison_df = pd.concat([comparison_df, pd.DataFrame(rows)], ignore_index=True)
+
+    st.markdown("## Cross-Method Comparison")
+    st.markdown("The following table compares the error statistics across the selected methods:")
+    
+    # Only display the comparison if there are valid rows
+    if not comparison_df.empty:
+        st.table(comparison_df)
+        
+        # Analyze the results
+        st.markdown("### Insights from Comparison:")
+        min_mean_error_row = comparison_df.loc[comparison_df['Mean Error (%)'].idxmin()]
+        min_max_error_row = comparison_df.loc[comparison_df['Max Error (%)'].idxmin()]
+
+        st.write(f"- The method with the lowest **mean error** is `{min_mean_error_row['Method']}` with a step size of {min_mean_error_row['Step Size']} and a mean error of {min_mean_error_row['Mean Error (%)']}%.")
+        st.write(f"- The method with the lowest **max error** is `{min_max_error_row['Method']}` with a step size of {min_max_error_row['Step Size']} and a max error of {min_max_error_row['Max Error (%)']}%.")
+    else:
+        st.warning("No valid data to compare.")
+
+
 def main():
     # Main app title and description
     st.title("Numerical ODE Solver with Dynamic Plot")
@@ -103,21 +142,36 @@ def main():
     # Allow the user to select step sizes
     step_sizes = st.sidebar.multiselect("Step Sizes (h):", [0.1, 0.05, 0.01, 0.005], [0.1, 0.05, 0.01])
 
+    # Dictionary to store error stats for comparison
+    error_stats_dict = {}
+
     # Automatically update the plot and table as inputs change
     if methods and step_sizes:
-        # Iterate over each method selected by the user
+        st.markdown("## Method Solutions")
         for method in methods:
-            st.markdown(f"## {method} Method")
-            
-            # Generate the plot and error table for each method
+            st.markdown(f"### {method} Method")
             fig, error_df = plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes)
+
+            # Store error statistics for cross-method comparison
+            error_stats_dict[method] = [(row['Step Size'], row['Mean Error (%)'], row['Max Error (%)']) for _, row in error_df.iterrows()]
 
             # Show plot
             st.plotly_chart(fig, use_container_width=True)
 
-            # Show error statistics table
-            st.markdown(f"### Percent Error Statistics for {method} Method")
-            st.table(error_df)
+        # Divider before showing error statistics
+        st.divider()
+
+        st.markdown("## Error Statistics for Each Method")
+        for method in methods:
+            st.markdown(f"#### Percent Error Statistics for {method} Method")
+            st.table(pd.DataFrame(error_stats_dict[method], columns=["Step Size", "Mean Error (%)", "Max Error (%)"]))
+
+        # Divider before cross-method comparison
+        st.divider()
+
+        # Cross-method comparison
+        compare_methods(error_stats_dict)
+        
     else:
         st.warning("Please select at least one method and one step size to see the results.")
 
