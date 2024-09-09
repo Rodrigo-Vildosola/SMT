@@ -4,3 +4,4 @@ streamlit
 watchdog
 numpy
 pandas
+plotly
