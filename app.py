@@ -20,14 +20,18 @@ def plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes):
 
     # Get real solution
     real_sol = get_real_solution(t0, tf, x0, equation_str)
-    t_fine = np.linspace(t0, tf, 1000)  # Use fine time grid for real solution
-    x_real = real_sol.sol(t_fine)[0]  # Get the real solution
+    t_fine = np.linspace(t0, tf, 1000)
+    x_real = real_sol.sol(t_fine)[0]
     
-    # Create a Plotly figure with larger size
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=t_fine, y=x_real, mode='lines', name='Real Solution (approx)', 
-                             line=dict(color='black', dash='dash')))
+    fig.add_trace(go.Scatter(
+        x=t_fine, 
+        y=x_real, 
+        mode='lines', 
+        name='Real Solution', 
+        line=dict(color='gray', width=2, dash='dash')
+    ))
 
     error_stats = []
     
