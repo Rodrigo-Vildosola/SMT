@@ -98,13 +98,15 @@ def main():
         compare_methods(error_stats_dict)
 
         # Generate PDF Report Button
-        if st.button("Download Report"):
+        if st.button("Download PDF Report"):
+            method_plots = {method: fig for method in methods}  # Collect all generated plots
             pdf_report = create_pdf_report(equation_str, error_stats_dict, method_plots)
             st.download_button(
-                label="Download PDF Report",
+                label="Download Report",
                 data=pdf_report,
-                file_name="numerical_ode_report.pdf",
+                file_name="ODE_Report.pdf",
                 mime="application/pdf"
             )
+
 if __name__ == "__main__":
     main()

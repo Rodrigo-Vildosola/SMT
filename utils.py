@@ -56,53 +56,57 @@ def compare_methods(error_stats_dict):
 
 def create_pdf_report(equation_str, error_stats_dict, method_plots):
     """Generate a PDF report using ReportLab."""
-    
+
     # Create a BytesIO object to store the PDF
     pdf_output = BytesIO()
-    
-    # Create a SimpleDocTemplate for the PDF
-    doc = SimpleDocTemplate(pdf_output, pagesize=letter)
-    
+
+    # Create a SimpleDocTemplate with reduced margins
+    doc = SimpleDocTemplate(
+        pdf_output, 
+        pagesize=letter,
+        leftMargin=10, rightMargin=10, topMargin=10, bottomMargin=10  # Reduce margins
+    )
+
     # Elements list to hold all content for the PDF
     elements = []
-    
+
     # Styles
     styles = getSampleStyleSheet()
     title_style = styles['Title']
     normal_style = styles['Normal']
-    
+
     # Title
     title = Paragraph("Numerical ODE Solver Report", title_style)
     elements.append(title)
     elements.append(Spacer(1, 12))  # Add a spacer
-    
+
     # ODE Equation
     ode_paragraph = Paragraph(f"<strong>ODE Equation:</strong> {equation_str}", normal_style)
     elements.append(ode_paragraph)
     elements.append(Spacer(1, 12))  # Add a spacer
-    
+
     # Iterate over methods and add plots and error tables
     for method, fig in method_plots.items():
         # Add method title
         method_title = Paragraph(f"<strong>{method} Method</strong>", normal_style)
         elements.append(method_title)
         elements.append(Spacer(1, 12))  # Add a spacer
-        
+
         # Save Plot as PNG and insert it into the PDF
         img_buffer = BytesIO()
-        fig.write_image(img_buffer, format="png")
+        fig.write_image(img_buffer, format="png")  # Ensure kaleido is installed for color images
         img_buffer.seek(0)
-        
+
         # Add image to the report
-        img = Image(img_buffer, 6 * inch, 4 * inch)  # Adjust image size
+        img = Image(img_buffer, 7.5 * inch, 4.5 * inch)  # Adjust image size to use more space
         elements.append(img)
         elements.append(Spacer(1, 24))  # Add space after the image
-        
+
         # Error Table for the method
         error_table_data = [["Step Size", "Mean Error (%)", "Max Error (%)"]]  # Table Header
         for row in error_stats_dict[method]:
             error_table_data.append([str(row[0]), f"{row[1]:.2f}", f"{row[2]:.2f}"])
-        
+
         # Create table with styling
         error_table = Table(error_table_data)
         error_table.setStyle(TableStyle([
@@ -113,14 +117,14 @@ def create_pdf_report(equation_str, error_stats_dict, method_plots):
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),  # Header font
             ('BACKGROUND', (0, 1), (-1, -1), colors.beige),  # Body background color
         ]))
-        
+
         elements.append(error_table)
         elements.append(Spacer(1, 24))  # Add a spacer after the table
-    
+
     # Build the PDF
     doc.build(elements)
-    
+
     # Move cursor to start of the BytesIO object
     pdf_output.seek(0)
-    
+
     return pdf_output
