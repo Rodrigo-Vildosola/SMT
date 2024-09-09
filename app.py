@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from equations import parse_equation
 from solvers import real_solution, dynamic_ode_function
 from methods import euler_method, rk2_method, rk4_method
-from utils import percent_error, compare_methods
+from utils import percent_error, compare_methods, create_pdf_report
 
 st.set_page_config(layout="wide", page_title="Numerical ODE Solver", page_icon="🔢")
 
@@ -83,17 +83,28 @@ def main():
     step_sizes = st.sidebar.multiselect("Step Sizes (h):", [0.1, 0.05, 0.01, 0.005], [0.1, 0.05, 0.01])
     
     error_stats_dict = {}
-    
+    method_plots = {}
+
     if methods and step_sizes:
         for method in methods:
             fig, error_df = plot_solution_and_errors(equation_str, x0, t0, tf, method, step_sizes)
             st.plotly_chart(fig)
             
-            # Collect error stats for comparison
+            # Collect error stats for comparison and plots for the report
             error_stats_dict[method] = [(row['Step Size'], row['Mean Error (%)'], row['Max Error (%)']) for _, row in error_df.iterrows()]
+            method_plots[method] = fig
         
         # Compare methods if there are valid error stats
         compare_methods(error_stats_dict)
 
+        # Generate PDF Report Button
+        if st.button("Download Report"):
+            pdf_report = create_pdf_report(equation_str, error_stats_dict, method_plots)
+            st.download_button(
+                label="Download PDF Report",
+                data=pdf_report,
+                file_name="numerical_ode_report.pdf",
+                mime="application/pdf"
+            )
 if __name__ == "__main__":
     main()

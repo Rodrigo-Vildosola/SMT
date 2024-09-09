@@ -17,9 +17,3 @@ def parse_equation(equation_str):
     # Parse the equation
     return sp.sympify(equation_str, locals=sympy_functions)
 
-
-def dynamic_ode_function(equation_str):
-    """
-    Convert the ODE string into a callable function for numerical methods.
-    """
-    return lambda t, y: eval(equation_str, {"t": t, "y": y, "np": np})
